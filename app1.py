@@ -29,7 +29,7 @@ uploaded_file = st.file_uploader("Upload dataset pertandingan Real Madrid (.csv)
 if uploaded_file is not None:
     try:
         df = pd.read_csv(uploaded_file)
-        df['Date'] = pd.to_datetime(df['Date_Converted'], dayfirst=True, errors='coerce')
+        df['Date'] = pd.to_datetime(df['Date_Converted'])
         df = df.sort_values('Date') 
 
         df['Home_Ranking'] = df['Home_Ranking'].fillna('Tidak Diketahui (21)')
@@ -96,7 +96,7 @@ if uploaded_file is not None:
         X_test_scaled = scaler.transform(X_test)
 
         model = XGBClassifier(n_estimators=300, learning_rate=0.05, max_depth=6,
-                              random_state=42, eval_metric='mlogloss')
+                              random_state=42, eval_metric='mlogloss', use_label_encoder=False)
         model.fit(X_train_scaled, y_train)
 
         y_pred = model.predict(X_test_scaled)
